@@ -6,27 +6,21 @@ enum class CustomMessageTypes : uint32_t {
 	MovePlayer
 };
 
+class CustomClient : public olc::net::client_interface<CustomMessageTypes> {
+public:
+	bool FireBullet(float x, float y) {
+		olc::net::message<CustomMessageTypes> msg;
+		msg.header.id = CustomMessageTypes::FireBullet;
+		msg << x << y;
+		Send(msg);
+	}
+};
+
 int main() {
+	CustomClient c;
 
-	olc::net::message<CustomMessageTypes> msg;
-	msg.header.id = CustomMessageTypes::FireBullet;
-
-	int a = 1;
-	bool b = true;
-	float c = 3.14159f;
-
-	struct {
-		float x;
-		float y;
-	} d[5];
-
-	msg << a << b << c << d;
-
-	a = 99;
-	b = false;
-	c = 99.0f;
-
-	msg >> d >> c >> b >> a;
+	c.Connect("community.holuck.com", 60000);
+	c.FireBullet(2.0f, 5.0f);
 
 	return 0;
 }
