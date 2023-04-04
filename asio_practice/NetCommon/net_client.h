@@ -22,19 +22,22 @@ namespace olc {
 		public:
 			bool Connect(const std::string& host, const uint16_t port) {
 
-				try {
-					m_connection = std::make_unique<connection<T>>(); // Todo
+				try
+				{
 					asio::ip::tcp::resolver resolver(m_context);
-					m_endpoints = resolver.resolve(host, std::to_string(port));
+					asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, std::to_string(port));
 
-					m_connection->ConnectToServer(m_endpoints);
+					m_connection = std::make_unique<connection<T>>(connection<T>::owner::client, m_context, asio::ip::tcp::socket(m_context), m_qMessagesIn);
+
+					m_connection->ConnectToServer(endpoints);
+
 					thrContext = std::thread([this]() { m_context.run(); });
 				}
-				catch (std::exception& e) {
-					std::cerr << "Client exception: " << e.what() << "\n";
+				catch (std::exception& e)
+				{
+					std::cerr << "Client Exception: " << e.what() << "\n";
 					return false;
 				}
-
 				return true;
 			}
 
@@ -49,10 +52,6 @@ namespace olc {
 			bool IsConnected() {
 				if (m_connection) { return m_connection->IsConnected(); }
 				else { return false; }
-			}
-
-			tsqueue<owned_message<T>>& Incoming() {
-				return m_qMessagesIn;
 			}
 
 		public:

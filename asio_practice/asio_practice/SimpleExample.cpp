@@ -28,7 +28,7 @@ void GrabSomeData(asio::ip::tcp::socket& socket) {
 	);
 }
 
-int main() {
+int asio_simple() {
 	asio::error_code ec;
 
 	asio::io_context context;

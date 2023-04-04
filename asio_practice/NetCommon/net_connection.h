@@ -24,7 +24,7 @@ namespace olc {
 			asio::ip::tcp::socket m_socket;
 			asio::io_context& m_asioContext;
 			tsqueue<message<T>> m_qMessagesOut;
-			tsqueue<owned_message>& m_qMessagesIn;
+			tsqueue<owned_message<T>>& m_qMessagesIn;
 
 		};
 

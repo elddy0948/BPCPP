@@ -62,7 +62,7 @@ namespace olc
 						if (!ec)
 						{
 							std::cout << "[Server] New Connection: " << socket.remote_endpoint() << "\n";
-							std::shared_ptr<connection<T>> newconn = std::make_shared<connection<T>>(connection<T>::owner::server,
+							/*std::shared_ptr<connection<T>> newconn = std::make_shared<connection<T>>(connection<T>::owner::server,
 								m_asioContext, std::move(socket), m_qMessagesIn);
 
 							if (OnClientConnection(newconn))
@@ -74,7 +74,7 @@ namespace olc
 							else
 							{
 								std::cout << "[-----] Connection Denied\n";
-							}
+							}*/
 						}
 						else
 						{
@@ -86,7 +86,7 @@ namespace olc
 				);
 			}
 
-			void MessageClient(std::shared_ptr<connection<T>>, const message<T>& msg)
+			void MessageClient(std::shared_ptr<connection<T>> client, const message<T>& msg)
 			{
 				if (client && client->IsConnected())
 				{
@@ -115,20 +115,26 @@ namespace olc
 					else
 					{
 						OnClientDisconnect(client);
-						clientreset();
+						client.reset();
 						bInvalidClientExists = true;
 					}
 				}
 				if (bInvalidClientExists)
 				{
 					m_deqConnections.erase(
-						std::remove(m_deqConnections.begin(), m_deqConnections.end(), nuppotr), m_deqConnections.end());
+						std::remove(m_deqConnections.begin(), m_deqConnections.end(), nullptr), m_deqConnections.end());
 				}
 			}
 
 			void Update(size_t nMaxMessages = -1)
 			{
-
+				size_t nMessageCount = 0;
+				while (nMessageCount < nMaxMessages && !m_qMessagesIn.empty())
+				{
+					auto msg = m_qMessagesIn.pop_front();
+					OnMessage(msg.remote, msg.msg);
+					nMessageCount++;
+				}
 			}
 
 		protected:

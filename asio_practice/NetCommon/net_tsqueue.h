@@ -3,8 +3,10 @@
 
 #include "net_common.h"
 
-namespace olc {
-	namespace net {
+namespace olc 
+{
+	namespace net 
+	{
 		template <typename T>
 		class tsqueue {
 		public:
