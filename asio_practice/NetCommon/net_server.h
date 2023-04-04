@@ -62,7 +62,7 @@ namespace olc
 						if (!ec)
 						{
 							std::cout << "[Server] New Connection: " << socket.remote_endpoint() << "\n";
-							/*std::shared_ptr<connection<T>> newconn = std::make_shared<connection<T>>(connection<T>::owner::server,
+							std::shared_ptr<connection<T>> newconn = std::make_shared<connection<T>>(connection<T>::owner::server,
 								m_asioContext, std::move(socket), m_qMessagesIn);
 
 							if (OnClientConnection(newconn))
@@ -74,7 +74,7 @@ namespace olc
 							else
 							{
 								std::cout << "[-----] Connection Denied\n";
-							}*/
+							}
 						}
 						else
 						{
