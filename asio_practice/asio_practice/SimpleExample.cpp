@@ -30,22 +30,14 @@ void GrabSomeData(asio::ip::tcp::socket& socket) {
 
 int asio_simple() {
 	asio::error_code ec;
-
 	asio::io_context context;
-
-	// give some fake tasks to asio so the context doesn't finish
 	asio::io_context::work idleWork(context);
-
-	// Start the context
 	std::thread thrContext = std::thread([&]() { context.run(); });
 
-	// Get the address of somewhere we wish to connect to
-	//asio::ip::tcp::endpoint endpoint(asio::ip::make_address("93.184.216.34", ec), 80);
 	asio::ip::tcp::endpoint endpoint(asio::ip::make_address("51.38.81.49", ec), 80);
 
 	asio::ip::tcp::socket socket(context);
 
-	// Tell socket to try and connect
 	socket.connect(endpoint, ec);
 
 	if (!ec) {
