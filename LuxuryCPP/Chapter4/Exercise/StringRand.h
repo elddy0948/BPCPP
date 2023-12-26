@@ -14,12 +14,13 @@ const string alpha = "abcdefghijklmnopqrstuvwxyz";
 void run()
 {
 	cout << "아래에 한 줄을 입력하세요.(exit를 입력하면 종료합니다.)\n";
+	srand((unsigned)time(0));
+
 	while (true)
 	{
 		string str;
 		getline(cin, str);
 		if (str == "exit") { break; }
-		srand((unsigned)time(0));
 
 		int n = rand() % alpha.size();
 
